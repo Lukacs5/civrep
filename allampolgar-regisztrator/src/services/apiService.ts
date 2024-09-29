@@ -53,7 +53,7 @@ const authApiService = {
 export const manageUser = async (
   operation: 'create' | 'update' | 'delete' | 'get',
   id: number | null,
-  data: any = null
+  data: any = null,
 ) => {
   try {
     const token = localStorage.getItem('token');

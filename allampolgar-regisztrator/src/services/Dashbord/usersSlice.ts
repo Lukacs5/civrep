@@ -1,7 +1,7 @@
 // src/pages/dashboardSlice.ts
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { User } from '../../types/User.ts'; 
+import { User } from '../../types/User.ts';
 import { manageUser } from '../apiService';
 
 export const fetchUsers = createAsyncThunk<User[]>(
@@ -14,11 +14,14 @@ export const fetchUsers = createAsyncThunk<User[]>(
         throw new Error('No token found');
       }
 
-      const response = await axios.get<User[]>(`${import.meta.env.VITE_API_URL}/api/users`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
+      const response = await axios.get<User[]>(
+        `${import.meta.env.VITE_API_URL}/api/users`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         },
-      });
+      );
 
       return response.data;
     } catch (error: any) {
@@ -27,13 +30,12 @@ export const fetchUsers = createAsyncThunk<User[]>(
   },
 );
 
-
 export const createUser = createAsyncThunk(
   'dashboard/createUser',
   async (user: User) => {
     const response = await manageUser('create', null, user);
     return response.data; // assuming the response contains the created user
-  }
+  },
 );
 
 export const updateUser = createAsyncThunk(
@@ -41,7 +43,7 @@ export const updateUser = createAsyncThunk(
   async (user: User) => {
     const response = await manageUser('update', user.id, user);
     return response.data; // assuming the response contains the updated user
-  }
+  },
 );
 
 const dashboardSlice = createSlice({
@@ -67,7 +69,9 @@ const dashboardSlice = createSlice({
       })
       .addCase(updateUser.fulfilled, (state, action) => {
         // Handle the updated user
-        const index = state.users.findIndex(user => user.id === action.payload.id);
+        const index = state.users.findIndex(
+          (user) => user.id === action.payload.id,
+        );
         if (index !== -1) {
           state.users[index] = action.payload; // Update the user in the state
         }

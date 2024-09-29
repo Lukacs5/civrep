@@ -4,7 +4,7 @@ import dashboardReducer from './usersSlice';
 
 export const store = configureStore({
   reducer: {
-    dashboard: dashboardReducer, 
+    dashboard: dashboardReducer,
   },
 });
 

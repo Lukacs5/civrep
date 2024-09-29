@@ -19,16 +19,16 @@ const Dashboard = () => {
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [userToDelete, setUserToDelete] = useState<User | null>(null);
   const [userToEdit, setUserToEdit] = useState<User | null>(null);
-  
+
   const { users, status, error } = useSelector(
     (state: RootState) => state.dashboard,
   );
 
   useEffect(() => {
-    if ( status === 'idle') {
+    if (status === 'idle') {
       dispatch(fetchUsers());
     }
-  }, [dispatch, status ]);
+  }, [dispatch, status]);
 
   if (status === 'loading') {
     return <p>Loading...</p>;
@@ -49,11 +49,11 @@ const Dashboard = () => {
       message.error('No user selected for deletion!');
       return;
     }
-    
+
     try {
       console.log(`Deleting user with id: ${userId}`);
       const response = await manageUser('delete', userId);
-  
+
       if (response.status === 200 || response.status === 201) {
         message.success('User deleted successfully!');
         dispatch(fetchUsers()); // Refresh the list of users after successful deletion
@@ -66,7 +66,6 @@ const Dashboard = () => {
       setIsDeleteModalVisible(false); // Close the modal after deletion attempt
     }
   };
-  
 
   const handleEdit = (user: User) => {
     setUserToEdit(user);
