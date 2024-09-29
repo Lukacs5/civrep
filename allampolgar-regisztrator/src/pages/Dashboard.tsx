@@ -10,7 +10,7 @@ import DeleteIcon from '../assets/delete.svg';
 import Navbar from '../components/Navbar';
 import { message, Modal } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import { manageUser } from '../services/authService';
+import { manageUser } from '../services/apiService';
 
 const Dashboard = () => {
   const navigate = useNavigate();

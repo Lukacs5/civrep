@@ -8,7 +8,7 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import Registration from './pages/Registration';
 import PrivateRoute from './components/PrivateRoute'; // PrivateRoute komponenst
-import authService from './services/authService';
+import authService from './services/apiService';
 import { Provider } from 'react-redux';
 import { store } from './services/Dashbord/store';
 

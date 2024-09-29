@@ -2,7 +2,7 @@ import React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Button, Form, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import { login } from '../services/authService'; // Importáld az API hívást
+import { login } from '../services/apiService'; // Importáld az API hívást
 
 type Inputs = {
   username: string;

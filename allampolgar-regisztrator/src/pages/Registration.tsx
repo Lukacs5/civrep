@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { Button, Form, Select, DatePicker, message, Modal } from 'antd';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { manageUser } from '../services/authService';
+import { manageUser } from '../services/apiService';
 import { User } from '../types/User'; // Ensure this path is correct
 import moment from 'moment';
 
