@@ -22,8 +22,9 @@ git clone https://github.com/yourusername/allampolgar-regisztrator.git
 cd allampolgar-regisztrator
 ```
 
-##Frontend Setup
-###Navigate to the project directory and start the development server:
+## Frontend Setup
+
+### Navigate to the project directory and start the development server:
 ```bash
 cd ./allampolgar-regisztrator
 npm install
@@ -33,8 +34,9 @@ npm run dev
 you can change it if you need to
 .env --> VITE_API_URL  = http://localhost:5001 
 
-##Mock API Setup
-###In a new terminal, navigate to the mock API directory and start the server:
+## Mock API Setup
+
+### In a new terminal, navigate to the mock API directory and start the server:
 ```
 cd ./mock-api
 npm install
