@@ -2,13 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { Button, Form, Select, DatePicker, message, Modal } from 'antd';
 import { useNavigate, useLocation } from 'react-router-dom';
-import axios from 'axios';
+import { manageUser } from '../services/authService';
 import { User } from '../types/User'; // Ensure this path is correct
 import moment from 'moment';
 
 const { Option } = Select;
-
-const apiUrl = 'http://localhost:5001/api/users';
 
 const Registration: React.FC = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -44,11 +42,12 @@ const Registration: React.FC = () => {
           : 'Nem',
       };
 
-      const endpoint =
-        mode === 'edit' ? `${apiUrl}/update/${data.id}` : `${apiUrl}/register`;
-      const response = await axios.post(endpoint, formattedData);
+      const response =
+        mode === 'edit'
+          ? await manageUser('update', formattedData.id, formattedData)
+          : await manageUser('create', null, formattedData);
 
-      if (response.status == 201) {
+      if (response.status == 201 || response.status == 200) {
         message.success('Mentés sikeres!');
         navigate('/dashboard');
       } else {

@@ -1,14 +1,14 @@
 // components/PrivateRoute.tsx
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import authService from '../services/apiService'; // Ensure this is the correct path
+import authService from '../services/apiService'; 
 
 interface PrivateRouteProps {
-  element: React.ReactNode; // Define the type for the 'element' prop
+  element: React.ReactNode; 
 }
 
 const PrivateRoute: React.FC<PrivateRouteProps> = ({ element }) => {
-  const isAuthenticated = authService.isAuthenticated(); // Ellenőrizzük a hitelesítést
+  const isAuthenticated = authService.isAuthenticated(); 
 
   return isAuthenticated ? <>{element}</> : <Navigate to="/login" />;
 };

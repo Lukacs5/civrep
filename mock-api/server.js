@@ -97,6 +97,54 @@ app.post('/api/users/register', (req, res) => {
     res.status(201).json(newUser); // res.status(201).json(newUser); .... 
   });
 
+  app.put('/api/users/update/:id', (req, res) => {
+    const { id } = req.params;
+    const {
+      title,
+      lastName,
+      firstName,
+      middleName,
+      gender,
+      maidenName,
+      placeOfBirth,
+      dateOfBirth,
+      citizenship,
+      taxIdentificationNumber,
+      loanEligibility,
+    } = req.body;
+
+    // Keressük meg a frissítendő felhasználót az ID alapján
+    const userIndex = users.findIndex(user => user.id == id);
+
+    if (userIndex === -1) {
+        // Ha nem található a felhasználó
+        return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Frissítsük a felhasználó adatait
+    const updatedUser = {
+      ...users[userIndex], // Megtartjuk az eredeti adatokat
+      title,
+      lastName,
+      firstName,
+      middleName,
+      gender,
+      maidenName: gender === 'Nő' ? maidenName : '', 
+      placeOfBirth,
+      dateOfBirth,
+      citizenship,
+      taxIdentificationNumber,
+      loanEligibility,
+    };
+
+    // Frissítsük az users tömböt
+    users[userIndex] = updatedUser;
+
+    console.log(users);
+    res.status(200).json(updatedUser);
+});
+
+
 // Regisztráció
 app.post('/api/register', async (req, res) => {
   const { username, password } = req.body;
@@ -145,23 +193,23 @@ app.post('/api/login', async (req, res) => {
   });
   
 
-// Update a user
-app.put('/api/users/:id', (req, res) => {
-  const user = users.find(u => u.id === parseInt(req.params.id));
-  if (!user) return res.status(404).send('User not found');
 
-  Object.assign(user, req.body);
-  res.json(user);
+  app.delete('/api/users/delete/:id', (req, res) => {
+    const { id } = req.params;
+ 
+    const userIndex = users.findIndex(user => user.id == id);
+
+    if (userIndex === -1) {
+        
+        return res.status(404).json({ message: 'User not found' });
+    }
+
+    const deletedUser = users.splice(userIndex, 1);
+
+    console.log(users);
+    res.status(200).json({ message: 'User deleted successfully', deletedUser });
 });
 
-// Delete a user
-app.delete('/api/users/:id', (req, res) => {
-  const userIndex = users.findIndex(u => u.id === parseInt(req.params.id));
-  if (userIndex === -1) return res.status(404).send('User not found');
-
-  users.splice(userIndex, 1);
-  res.status(204).send();
-});
 
 // Indítsd el a kezdő felhasználó beállítását, mielőtt elindítanád a szervert
 setupInitialUsers().then(() => {

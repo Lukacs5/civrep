@@ -7,9 +7,10 @@ import { User } from '../types/User';
 import ViewIcon from '../assets/view.svg';
 import EditIcon from '../assets/edit.svg';
 import DeleteIcon from '../assets/delete.svg';
-import Navbar from '../components/navbar';
-import { Modal } from 'antd';
+import Navbar from '../components/Navbar';
+import { message, Modal } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import { manageUser } from '../services/authService';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -40,21 +41,38 @@ const Dashboard = () => {
     setIsDeleteModalVisible(true);
   };
 
-  const confirmDelete = () => {
-    // Implement your delete functionality here
+  const confirmDelete = async () => {
     console.log(`Deleting user with id: ${userToDelete?.id}`);
     setIsDeleteModalVisible(false);
-    //api call delet item whit this id ...
+    const userId = userToDelete?.id; // Ellenőrzi, hogy a userToDelete nem null vagy undefined
+    if (!userId) {
+      message.error('No user selected for deletion!');
+      return;
+    }
+    
+    try {
+      console.log(`Deleting user with id: ${userId}`);
+      const response = await manageUser('delete', userId);
+      
+
+      if (response.status === 200 || response.status === 201) {
+        message.success('User deleted successfully!');
+      } else {
+        message.error('Failed to delete the user.');
+      }
+    } catch (error) {
+      message.error('An error occurred while deleting the user!');
+    }
   };
 
   const handleEdit = (user: User) => {
     setUserToEdit(user);
-    navigate('/registration', { state: { user, mode: 'edit' } }); // Navigate to Registration with user data
+    navigate('/registration', { state: { user, mode: 'edit' } });
   };
 
   const handleView = (user: User) => {
     setUserToEdit(user);
-    navigate('/registration', { state: { user, mode: 'view' } }); // Navigate to Registration with user data
+    navigate('/registration', { state: { user, mode: 'view' } });
   };
 
   return (
