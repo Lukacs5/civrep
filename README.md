@@ -20,11 +20,11 @@ First, clone the repository to your local machine:
 ```bash
 git clone https://github.com/yourusername/allampolgar-regisztrator.git
 cd allampolgar-regisztrator
-
+```
 
 ##Frontend Setup
 ###Navigate to the project directory and start the development server:
-```
+```bash
 cd ./allampolgar-regisztrator
 npm install
 npm run dev
