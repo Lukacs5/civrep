@@ -3,12 +3,26 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { User } from '../../types/User.ts'; 
 
-// Aszinkron művelet a felhasználók lekéréséhez
 export const fetchUsers = createAsyncThunk<User[]>(
   'dashboard/fetchUsers',
-  async () => {
-    const response = await axios.get<User[]>(`${import.meta.env.VITE_API_URL}/api/users`);
-    return response.data;
+  async (_, thunkAPI) => {
+    try {
+      const token = localStorage.getItem('token');
+
+      if (!token) {
+        throw new Error('No token found');
+      }
+
+      const response = await axios.get<User[]>(`${import.meta.env.VITE_API_URL}/api/users`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return response.data;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
   },
 );
 
