@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { Button, Form, Select, DatePicker, message, Modal } from 'antd';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { manageUser } from '../services/apiService';
 import { User } from '../types/User'; // Ensure this path is correct
 import moment from 'moment';
+import { useDispatch } from 'react-redux';
+import { createUser, updateUser } from '../services/Dashbord/usersSlice';
+import { AppDispatch } from '../services/Dashbord/store';
 
 const { Option } = Select;
 
@@ -19,7 +21,7 @@ const Registration: React.FC = () => {
   } = useForm<User>();
   const navigate = useNavigate();
   const location = useLocation();
-
+  const dispatch: AppDispatch = useDispatch();
   const mode = location.state?.mode || 'registration'; // Default to registration mode
   const user = location.state?.user as User;
 
@@ -32,7 +34,7 @@ const Registration: React.FC = () => {
 
   const onSubmit: SubmitHandler<User> = async (data) => {
     try {
-      const formattedData = {
+      const formattedData: User = {
         ...data,
         loanEligibility: isLoanEligible(
           data.citizenship,
@@ -42,17 +44,14 @@ const Registration: React.FC = () => {
           : 'Nem',
       };
 
-      const response =
-        mode === 'edit'
-          ? await manageUser('update', formattedData.id, formattedData)
-          : await manageUser('create', null, formattedData);
-
-      if (response.status == 201 || response.status == 200) {
-        message.success('Mentés sikeres!');
-        navigate('/dashboard');
+      if (mode === 'edit') {
+        await dispatch(updateUser(formattedData));
       } else {
-        message.error('Mentés sikertelen!');
+        await dispatch(createUser(formattedData));
       }
+
+      message.success('Mentés sikeres!');
+      navigate('/dashboard');
     } catch (error) {
       message.error('Hiba történt!');
     }
@@ -93,7 +92,7 @@ const Registration: React.FC = () => {
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-md w-80">
         <h2 className="text-2xl font-bold text-center mb-6 text-blue-700">
-          Registration
+          {mode.toUpperCase()}
         </h2>
 
         <form onSubmit={handleSubmit(onSubmit)}>

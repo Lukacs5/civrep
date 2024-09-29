@@ -11,6 +11,7 @@ import Navbar from '../components/Navbar';
 import { message, Modal } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { manageUser } from '../services/apiService';
+import { useLocation } from 'react-router-dom';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -18,15 +19,16 @@ const Dashboard = () => {
   const [isDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [userToDelete, setUserToDelete] = useState<User | null>(null);
   const [userToEdit, setUserToEdit] = useState<User | null>(null);
+  
   const { users, status, error } = useSelector(
     (state: RootState) => state.dashboard,
   );
 
   useEffect(() => {
-    if (status === 'idle') {
+    if ( status === 'idle') {
       dispatch(fetchUsers());
     }
-  }, [dispatch, status]);
+  }, [dispatch, status ]);
 
   if (status === 'loading') {
     return <p>Loading...</p>;
@@ -42,9 +44,7 @@ const Dashboard = () => {
   };
 
   const confirmDelete = async () => {
-    console.log(`Deleting user with id: ${userToDelete?.id}`);
-    setIsDeleteModalVisible(false);
-    const userId = userToDelete?.id; // Ellenőrzi, hogy a userToDelete nem null vagy undefined
+    const userId = userToDelete?.id; // Check if userToDelete is not null or undefined
     if (!userId) {
       message.error('No user selected for deletion!');
       return;
@@ -53,17 +53,20 @@ const Dashboard = () => {
     try {
       console.log(`Deleting user with id: ${userId}`);
       const response = await manageUser('delete', userId);
-      
-
+  
       if (response.status === 200 || response.status === 201) {
         message.success('User deleted successfully!');
+        dispatch(fetchUsers()); // Refresh the list of users after successful deletion
       } else {
         message.error('Failed to delete the user.');
       }
     } catch (error) {
       message.error('An error occurred while deleting the user!');
+    } finally {
+      setIsDeleteModalVisible(false); // Close the modal after deletion attempt
     }
   };
+  
 
   const handleEdit = (user: User) => {
     setUserToEdit(user);

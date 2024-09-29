@@ -49,27 +49,6 @@ export const login = async (credentials: Credentials) => {
 const authApiService = {
   isAuthenticated: () => !!localStorage.getItem('token'),
 };
-/*
-export const deleteUserById = async (id: number) => {
-  try {
-    const token = localStorage.getItem('token');
-
-    if (!token) {
-      throw new Error('No token found');
-    }
-
-    const response = await instance.delete(`/api/users/delete/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`, // Token hozzáadása az Authorization headerhez
-      },
-    });
-    
-    return response;
-  } catch (error) {
-    throw error;
-  }
-};
-*/
 
 export const manageUser = async (
   operation: 'create' | 'update' | 'delete' | 'get',
@@ -123,5 +102,26 @@ export const manageUser = async (
   }
 };
 
+/*
+export const deleteUserById = async (id: number) => {
+  try {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      throw new Error('No token found');
+    }
+
+    const response = await instance.delete(`/api/users/delete/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`, // Token hozzáadása az Authorization headerhez
+      },
+    });
+    
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+*/
 
 export default authApiService;
